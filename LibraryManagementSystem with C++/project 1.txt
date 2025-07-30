@@ -1,0 +1,295 @@
+#include <iostream>
+#include <string>
+
+
+using namespace std;
+
+
+class book
+{
+public :
+    int Id ;
+    string title, author ;
+    bool available = true ;
+    book ()
+    {
+
+    }
+    book (int x, string y, string z)
+    {
+        Id = x;
+        title = y;
+        author = z;
+        void print_book();
+    }
+    void print_book()
+    {
+        cout << "book Id is " << Id << endl;
+        cout << "book title is " << title << endl;
+        cout << "book author is " << author << endl;
+        if (available==false)
+        {
+            cout << "This book is unavailable now :(" << endl;
+        }
+        else
+        {
+            cout << "This book is available now :)" << endl;
+        }
+
+
+    }
+
+};
+class Library
+{
+private:
+
+    book* arr;
+    int capacity;
+    int numOfBooks;
+
+     void expand() {
+        capacity *= 2;
+        book* arr2 = new book[capacity];
+        for (int i = 0; i < numOfBooks; i++) {
+            arr2[i] = arr[i];
+        }
+        delete[] arr;
+        arr = arr2;
+    }
+
+
+
+public:
+    Library()
+    {
+        arr = new book[5];
+        capacity = 5;
+        numOfBooks = 0 ;
+    }
+
+    void addBook(int id, string title, string author)
+    {
+        if (numOfBooks == capacity)
+        {
+            expand();
+        }
+
+        bool found = false;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == id)
+            {
+                found = true;
+            }
+        }
+        if (found==false)
+        {
+
+            arr[numOfBooks] =  book(id, title, author);
+            numOfBooks++;
+        }
+
+        else
+        {
+            cout << "There is a Book with ID "<< id <<" try use another Id ." <<endl << endl;
+        }
+    }
+
+
+
+
+
+    void RemovingBook(int bookid)
+    {
+        if (numOfBooks==0)
+        {
+            return ;
+        }
+        bool found = false;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == bookid)
+            {
+                found = true;
+            }
+        }
+
+
+        if (found==true)
+        {
+            for (int i = bookid-1; i <numOfBooks-1; ++i)
+            {
+                arr[i] = arr [i+1];
+            }
+            numOfBooks -- ;
+
+        }
+        else
+        {
+            cout << "Book with ID " << bookid << " not found." << endl << endl;
+        }
+    }
+
+
+
+
+    void UpdatingBook(int id, string title, string author)
+    {
+        bool found = false;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == id)
+            {
+                arr[i] =  book (id,title,author);
+                found = true;
+                break;
+
+            }
+
+        }
+        if (found==false)
+        {
+            cout << "Book with ID " << id << " not found." << endl << endl;
+        }
+
+
+    }
+
+
+
+
+    void BorrowingBook (int id)
+    {
+
+        bool found = true;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == id)
+            {
+                arr[i] . available = false ;
+                found = true;
+                break;
+
+            }
+            if (found==false)
+            {
+                cout << "Book with ID " << id << " not found." << endl << endl;
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
+     void ReturningBook (int id)
+    {
+
+        bool found = true;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == id)
+            {
+                arr[i].available = true ;
+                found = true;
+                break;
+
+            }
+            if (found==false)
+            {
+                cout << "Book with ID " << id << " not found." << endl << endl;
+            }
+
+
+        }
+
+
+    }
+
+
+
+
+
+    void DisplayingBooks()
+    {
+
+
+        for (int i = 0; i < numOfBooks; i++)
+        {
+            arr[i].print_book();
+            cout << endl ;
+        }
+
+    }
+
+
+
+
+    void Searching(int bookId)
+    {
+        bool found = false;
+        for (int i = 0; i < numOfBooks; ++i)
+        {
+            if (arr[i].Id == bookId)
+            {
+                arr[i].print_book();
+                cout << endl ;
+                found = true;
+                return;
+            }
+        }
+
+        if (found==false)
+        {
+            cout << "Book with ID " << bookId << " not found." << endl <<endl;
+        }
+    }
+
+
+
+    // Books for My Library (:
+    void LibraryBooks()
+    {
+        arr[0] =  book (1, "Palace Walk", "Naguib Mahfouz");
+        arr[1] =  book(2, "Palace of Desire", "Naguib Mahfouz");
+        arr[2] =  book(3,"Dived Copperfield","Charles Dickens");
+        arr[3] =  book (4,"Oliver Twist","Charles Dickens");
+        numOfBooks = 4;
+
+    }
+
+
+
+
+};
+
+int main()
+{
+    Library z;
+
+
+
+    z.LibraryBooks();
+
+    z.addBook (5,"Utopia","Ahmed Khaled Tawfik");
+
+    z.UpdatingBook( 5,"title", "author");
+
+    z.RemovingBook(3);
+
+    z.BorrowingBook(2);
+
+    z.Searching(2);
+
+
+    z.ReturningBook(2);
+
+    z.DisplayingBooks();
+
+    return 0;
+}
